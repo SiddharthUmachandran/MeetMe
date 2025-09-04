@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { GoogleIcon, GitHubIcon, LogoIcon } from '../Icons';
+import { GoogleIcon, GitHubIcon, LogoIcon } from '../../Icons';
 
 export default function LoginPage() {
   const router = useRouter();
