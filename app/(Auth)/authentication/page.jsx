@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { GoogleIcon, GitHubIcon, LogoIcon } from '../../Icons';
 
-export default function LoginPage() {
+export default function Page() {
   const router = useRouter();
   const supabase = createClientComponentClient();
 

@@ -432,7 +432,7 @@ const HomePage = ({ projects, user, router }) => {
   );
 };
 
-export default function App() {
+export default function Page() {
   const [user, setUser] = useState({
     name: 'John Doe',
     email: 'john.doe@example.com',
