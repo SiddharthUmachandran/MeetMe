@@ -1,0 +1,26 @@
+import crypto from 'crypto';
+import 'dotenv/config'
+
+
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY; 
+
+
+export function encrypt(text) {
+  const IV = crypto.randomBytes(16).toString('hex').substring(0, 16);
+  console.log("text: ", text);
+  const cipher = crypto.createCipheriv('aes-256-cbc', ENCRYPTION_KEY, IV);
+  let encrypted = cipher.update(text);
+  encrypted += cipher.final('hex');
+  return {
+    IV,
+    encrypted
+  }
+}
+
+export function decrypt(text) {
+  const algorithm = 'aes-256-cbc';
+  const decipher = createDecipheriv(algorithm, ENCRYPTION_KEY, IV);
+  let decrypted = decipher.update(text, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+}

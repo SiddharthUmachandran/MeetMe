@@ -24,7 +24,12 @@ export default function Page() {
       provider,
       options: {
         redirectTo: `${location.origin}/auth/callback`, // must be set in Supabase dashboard
-      },
+        scopes: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/gmail.readonly",
+      }, QueryParams: {
+        access_type: 'offline',
+        prompt: 'consent',
+        include_granted_scopes: 'true',
+      }
     });
     if (error) console.error('OAuth error:', error.message);
   };
