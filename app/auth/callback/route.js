@@ -21,15 +21,30 @@ export async function GET(request) {
     const providerToken = data.session?.provider_token;
     const providerRefreshToken = data.session?.provider_refresh_token;
     const userId = data.session?.user.id;
-    const encryptedToken = encrypt(providerRefreshToken);
-    const {data2, error2} = await supabase
+    const email = data.session?.user.email;
+    const name = data.session?.user.user_metadata.full_name;
+    const encryptedToken = Buffer.from(encrypt(providerRefreshToken).encrypted).toString("base64");
+    console.log("encrypted token: ", encryptedToken);
+    const { data: upserted, error: upsertError } = await supabase
       .from('user_tokens')
-      .insert([
-        { user_id : userId, token: encryptedToken}
-      ]) 
+      .upsert(
+        { user_id: userId, token: encryptedToken }, 
+        { onConflict: 'user_id'} // tells Postgres which column to check
+     );
+    if (upsertError) {
+      console.error("Upsert failed:", upsertError);
+    } else {
+      console.log("Upsert success:", upserted);
+    }
+
+    const {data: data2, error: error2} = await supabase
+      .from('users')
+      .upsert(
+        { id: userId, email: email, name: name },
+        { onConflit: 'id'}
+      )
     if(error2){
-      console.log("Something went wrong twin:\n");
-      console.error(error2);
+      console.error("Upsert user failed:", error2);
     }
     // TODO: Use your SQL client (e.g., from your Python backend) to
     // securely store the userId and providerRefreshToken in your database.
